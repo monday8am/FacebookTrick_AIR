@@ -41,7 +41,7 @@ package
 		public function FacebookTrick_AIR()
 		{
 			
-			// interface 
+			// create interface 
 			
 			label 			= new Label		( this, 30, 30,  " Testing upload service " );
 			login_btn       = new PushButton( this, 30, 60,  " Login  ", onPressBtn );

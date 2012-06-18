@@ -10,8 +10,10 @@ package
 	
 	public class FacebookHTMLHost extends HTMLHost
 	{
+		
 		private static var SECURE_PERMISION_URL : String = "https://www.facebook.com/dialog/permissions.request";
 		private static var PERMISION_URL : String = "http://www.facebook.com/dialog/permissions.request";
+		
 		private static var REPORT_APP : String = "http://www.facebook.com/dialog/report.application";
 		
 		private static var REQUEST_LOGIN : String = "http://www.facebook.com/login.php?api_key";
@@ -30,12 +32,14 @@ package
 		private var _view : FacebookTrick_AIR;
 		
 		
+		
 		public function FacebookHTMLHost( view : FacebookTrick_AIR, defaultBehaviors:Boolean=true )
 		{
 			super( defaultBehaviors )
 			
 			_view = view;
 		}
+		
 		
 		override public function windowClose():void
 		{
@@ -44,12 +48,14 @@ package
 			htmlLoader.stage.nativeWindow.close();
 		}
 		
+		
 		override public function createWindow( windowCreateOptions:HTMLWindowCreateOptions ): HTMLLoader
 		{
 			log( "create window - do nothing" );
 			
 			return null;
 		}
+		
 		
 		override public function updateLocation( locationURL:String):void
 		{
@@ -95,14 +101,15 @@ package
 			{
 				
 			}
-			
-
 		}   
+		
 		
 		private function disableDontAllowBtn(event:Event):void
 		{
 			_html.removeEventListener( Event.COMPLETE, disableDontAllowBtn );	
 			
+			
+			// disable Dont Allow btn
 			
 			for (var i:int = 0; i < htmlLoader.window.document.getElementsByTagName("input").length; i++) 
 			{
@@ -120,6 +127,9 @@ package
 				}
 			}
 			
+			
+			// disable all links
+			
 			for (var j:int = 0; j <  htmlLoader.window.document.getElementsByTagName("a").length; j++) 
 			{
 				var anchor  : Object  = htmlLoader.window.document.getElementsByTagName("a")[j];
@@ -129,6 +139,7 @@ package
 			
 		}		
 		
+		
 		override public function set windowRect(value:Rectangle):void
 		{
 			htmlLoader.stage.nativeWindow.bounds = value;
@@ -136,27 +147,30 @@ package
 			log( "window rect : " +  value.x + ", " + value.y + ", " + value.width + ", " + value.height );
 		}
 		
+		
 		override public function updateStatus(status:String):void
 		{
 			log( "update status : " + status );
 		}
-			
+		
+		
 		override public function updateTitle(title:String):void
 		{
 			log( "update title : " + title );
 		}
+		
 		
 		override public function windowBlur():void
 		{
 			log( "window blur" );
 		}
 		
+		
 		override public function windowFocus():void
 		{
 			log( "window focus" );
 		}
 		
-		//
 		
 		private function log( str : String ):void
 		{
