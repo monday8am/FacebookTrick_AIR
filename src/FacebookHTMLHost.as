@@ -27,27 +27,34 @@ package
 		private static var SECURE_LOGIN_SUCCESS : String = "https://www.facebook.com/connect/login_success.html#access_token=";
 
 		private var _html : HTMLLoader;
-		private var _view : Sprite;
-		private var _messages : MovieClip;
+		private var _view : FacebookTrick_AIR;
 		
 		
-		public function FacebookHTMLHost( view : Sprite, defaultBehaviors:Boolean=true )
+		public function FacebookHTMLHost( view : FacebookTrick_AIR, defaultBehaviors:Boolean=true )
 		{
 			super( defaultBehaviors )
+			
+			_view = view;
 		}
 		
 		override public function windowClose():void
 		{
+			log( "close window" );
+			
 			htmlLoader.stage.nativeWindow.close();
 		}
 		
 		override public function createWindow( windowCreateOptions:HTMLWindowCreateOptions ): HTMLLoader
 		{
+			log( "create window - do nothing" );
+			
 			return null;
 		}
 		
 		override public function updateLocation( locationURL:String):void
 		{
+			log( "location changed : " + locationURL );
+			
 			
 			if( locationURL.indexOf( FacebookHTMLHost.PERMISION_URL 	   ) == 0 ||
 				locationURL.indexOf( FacebookHTMLHost.SECURE_PERMISION_URL ) == 0 
@@ -80,13 +87,13 @@ package
 				locationURL.indexOf( FacebookHTMLHost.SECURE_LOGIN_SUCCESS ) == 0 
 			)
 			{
-
+				
 			}	
 			
 			
 			if( locationURL.indexOf( "about:blank" ) == 0 )
 			{
-
+				
 			}
 			
 
@@ -108,6 +115,7 @@ package
 						button.name  == "cancel_clicked" )
 					{
 						button.disabled = true;
+						log( "disable button : " + button.name );
 					}
 				}
 			}
@@ -115,6 +123,7 @@ package
 			for (var j:int = 0; j <  htmlLoader.window.document.getElementsByTagName("a").length; j++) 
 			{
 				var anchor  : Object  = htmlLoader.window.document.getElementsByTagName("a")[j];
+				log( "change anchor : " + anchor.href );
 				anchor.href = "#";
 			}
 			
@@ -123,28 +132,35 @@ package
 		override public function set windowRect(value:Rectangle):void
 		{
 			htmlLoader.stage.nativeWindow.bounds = value;
-			_view.graphics.clear();
-			_view.graphics.beginFill( 0x000000 );
-			_view.graphics.drawRect( value.x + 15, value.y + 15, value.width, value.height );
-			_view.graphics.endFill();
+			
+			log( "window rect : " +  value.x + ", " + value.y + ", " + value.width + ", " + value.height );
 		}
 		
 		override public function updateStatus(status:String):void
 		{
-
+			log( "update status : " + status );
 		}
 			
 		override public function updateTitle(title:String):void
 		{
-			
+			log( "update title : " + title );
 		}
 		
 		override public function windowBlur():void
 		{
+			log( "window blur" );
 		}
 		
 		override public function windowFocus():void
 		{
+			log( "window focus" );
+		}
+		
+		//
+		
+		private function log( str : String ):void
+		{
+			_view.log( str);
 		}
 		
 	}

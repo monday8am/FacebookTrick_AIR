@@ -22,8 +22,8 @@ package
 
 		// facebook related
 		
-		protected static const APP_ID:String = "367694539964473"; 					//Place your application id here
-		protected static const APP_KEY:String = "7c03c3527d3a2e6701838c1ea82feeff"; //Place your application key here
+		protected static const APP_ID:String 	 = "367694539964473"; 					//Place your application id here
+		protected static const APP_KEY:String 	 = "7c03c3527d3a2e6701838c1ea82feeff"; //Place your application key here
 		protected static const APP_ORIGIN:String = "http://www.monday8am.com"; 		//Place your specified site URL for your app here. 
 		
 		
@@ -44,9 +44,9 @@ package
 			// interface 
 			
 			label 			= new Label		( this, 30, 30,  " Testing upload service " );
-			login_btn       = new PushButton( this, 30, 60,  " Login ", onPressBtn );
+			login_btn       = new PushButton( this, 30, 60,  " Login  ", onPressBtn );
 			logout_btn      = new PushButton( this, 30, 90,  " Logout ", onPressBtn );
-			label_events	= new TextArea(   this, 150, 60, " logs...\n" ); label_events.width = 400; label_events.height = 211;
+			label_events	= new TextArea(   this, 150, 60, " logs...\n" ); label_events.width = 520; label_events.height = 211;
 			
 			// init api
 			
@@ -56,18 +56,21 @@ package
 		}
 		
 		
-		public function login():void
+		private function login():void
 		{
-			html_host = new FacebookHTMLHost( this, true );
-			FacebookDesktop.htmlLoader.htmlHost = html_host;
-			
 			// show facebook login windows.
 			
 			FacebookDesktop.login( handleLogin, ['user_photos', 'publish_stream']);
+			
+			// add htmlHost object
+			
+			html_host = new FacebookHTMLHost( this, true );
+			FacebookDesktop.htmlLoader.htmlHost = html_host;		
+			
 		}	
 		
 		
-		public function logout():void
+		private function logout():void
 		{
 			FacebookDesktop.htmlLoader.htmlHost = null;
 			FacebookDesktop.logout( handleLogout, APP_ORIGIN );
@@ -88,6 +91,7 @@ package
 				
 			} else {
 				
+				log( "login ok" );
 				
 			}
 		}	
@@ -95,13 +99,13 @@ package
 		
 		private function handleInit(response:Object, fail:Object):void 
 		{
-			trace( "handle init...!!!" );
+			log( "handle init" );
 		}		
 				
 		
 		private function handleLogout( response:Object ):void 
 		{
-			trace( "handle logout...!!!" );
+			log( "handle logout" );
 		}
 		
 		
@@ -127,7 +131,7 @@ package
 		 * 
 		 */
 		
-		private function log( str : String ):void
+		public function log( str : String ):void
 		{
 			label_events.text += str + "\n";
 		}		
