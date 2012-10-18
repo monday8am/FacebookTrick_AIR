@@ -24,15 +24,15 @@ package
 		private static var CHECK_DEVICE : String = "https://www.facebook.com/checkpoint/";
 		
 		private static var BANNED_URLS :  Array = [ "http://www.facebook.com/login.php?login_attempt",
-													"https://www.facebook.com/login.php?login_attempt",
-													"http://www.facebook.com/connect/login_success.html?error_reason",
-													"https://www.facebook.com/connect/login_success.html?error_reason",
-													"http://www.facebook.com/dialog/report.application",
-													"http://www.facebook.com/connect/login_success.html#access_token=",
-													"https://www.facebook.com/connect/login_success.html#access_token=",
-													"http://www.facebook.com/r.php",
-													"http://www.facebook.com/register/fbconnect.php",
-													"about:blank"
+			"https://www.facebook.com/login.php?login_attempt",
+			"http://www.facebook.com/connect/login_success.html?error_reason",
+			"https://www.facebook.com/connect/login_success.html?error_reason",
+			"http://www.facebook.com/dialog/report.application",
+			"http://www.facebook.com/connect/login_success.html#access_token=",
+			"https://www.facebook.com/connect/login_success.html#access_token=",
+			"http://www.facebook.com/r.php",
+			"http://www.facebook.com/register/fbconnect.php",
+			"about:blank"
 		];
 		
 		private var _html : HTMLLoader;
