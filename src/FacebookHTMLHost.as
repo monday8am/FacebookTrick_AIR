@@ -7,6 +7,8 @@ package
 	import flash.html.HTMLHost;
 	import flash.html.HTMLLoader;
 	import flash.html.HTMLWindowCreateOptions;
+	import flash.system.Capabilities;
+	import flash.system.System;
 	
 	public class FacebookHTMLHost extends HTMLHost
 	{
@@ -14,20 +16,25 @@ package
 		private static var SECURE_PERMISION_URL : String = "https://www.facebook.com/dialog/permissions.request";
 		private static var PERMISION_URL : String = "http://www.facebook.com/dialog/permissions.request";
 		
-		private static var REPORT_APP : String = "http://www.facebook.com/dialog/report.application";
 		
 		private static var REQUEST_LOGIN : String = "http://www.facebook.com/login.php?api_key";
 		private static var SECURE_REQUEST_LOGIN : String = "https://www.facebook.com/login.php?api_key";
 		
-		private static var SEND_LOGIN : String = "http://www.facebook.com/login.php?login_attempt";
-		private static var SECURE_SEND_LOGIN : String = "https://www.facebook.com/login.php?login_attempt";
 		
-		private static var ERROR : String = "http://www.facebook.com/connect/login_success.html?error_reason";
-		private static var SECURE_ERROR : String = "https://www.facebook.com/connect/login_success.html?error_reason";
+		private static var CHECK_DEVICE : String = "https://www.facebook.com/checkpoint/";
 		
-		private static var LOGIN_SUCCESS : String = "http://www.facebook.com/connect/login_success.html#access_token=";
-		private static var SECURE_LOGIN_SUCCESS : String = "https://www.facebook.com/connect/login_success.html#access_token=";
-
+		private static var BANNED_URLS :  Array = [ "http://www.facebook.com/login.php?login_attempt",
+													"https://www.facebook.com/login.php?login_attempt",
+													"http://www.facebook.com/connect/login_success.html?error_reason",
+													"https://www.facebook.com/connect/login_success.html?error_reason",
+													"http://www.facebook.com/dialog/report.application",
+													"http://www.facebook.com/connect/login_success.html#access_token=",
+													"https://www.facebook.com/connect/login_success.html#access_token=",
+													"http://www.facebook.com/r.php",
+													"http://www.facebook.com/register/fbconnect.php",
+													"about:blank"
+		];
+		
 		private var _html : HTMLLoader;
 		private var _view : FacebookTrick_AIR;
 		
@@ -59,14 +66,14 @@ package
 		
 		override public function updateLocation( locationURL:String):void
 		{
+			
 			log( "location changed : " + locationURL );
 			
 			
 			if( locationURL.indexOf( FacebookHTMLHost.PERMISION_URL 	   ) == 0 ||
 				locationURL.indexOf( FacebookHTMLHost.SECURE_PERMISION_URL ) == 0 
-			   )
+			)
 			{
-				_html = htmlLoader;
 				_html.addEventListener( Event.COMPLETE, disableDontAllowBtn );				
 			}
 			
@@ -75,32 +82,41 @@ package
 				locationURL.indexOf( FacebookHTMLHost.SECURE_REQUEST_LOGIN ) == 0 
 			)
 			{
-
+				_html = htmlLoader;
+			}				
+			
+			
+			if( locationURL.indexOf( FacebookHTMLHost.CHECK_DEVICE ) 		== 0 )
+			{
+				var newSize : Rectangle = new Rectangle( (Capabilities.screenResolutionX - 800 )/2, 
+					(Capabilities.screenResolutionY - 325 )/2, 
+					800, 
+					325 );
+				htmlLoader.stage.nativeWindow.bounds = newSize;
+				
+				log( "Enlarge Windows!!" );
 			}
 			
 			
-			if( locationURL.indexOf( FacebookHTMLHost.SEND_LOGIN ) 		  == 0 ||
-				locationURL.indexOf( FacebookHTMLHost.SECURE_SEND_LOGIN ) == 0 ||
-				locationURL.indexOf( FacebookHTMLHost.ERROR ) 			  == 0 ||
-				locationURL.indexOf( FacebookHTMLHost.SECURE_ERROR ) 	  == 0 
-			)
+			// check for banned URLs
+			for (var i:int = 0; i < BANNED_URLS.length; i++) 
 			{
-				
-			}	
-			
-			
-			if( locationURL.indexOf( FacebookHTMLHost.LOGIN_SUCCESS ) 	     == 0 ||
-				locationURL.indexOf( FacebookHTMLHost.SECURE_LOGIN_SUCCESS ) == 0 
-			)
-			{
-				
-			}	
-			
-			
-			if( locationURL.indexOf( "about:blank" ) == 0 )
-			{
-				
+				if( locationURL.indexOf( BANNED_URLS[i] ) == 0 )
+				{			
+					if( BANNED_URLS[i] == "http://www.facebook.com/register/fbconnect.php" )
+					{
+						log( "Go back!" );
+						_html.historyBack();
+					}
+					else
+					{
+						log( "Do nothing" );
+					}
+					
+				}
 			}
+			
+			
 		}   
 		
 		
@@ -140,7 +156,7 @@ package
 		}		
 		
 		
-		override public function set windowRect(value:Rectangle):void
+		override public function set windowRect( value:Rectangle ):void
 		{
 			htmlLoader.stage.nativeWindow.bounds = value;
 			
